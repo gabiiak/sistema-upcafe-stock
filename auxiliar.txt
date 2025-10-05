@@ -1,0 +1,184 @@
+listar.php:
+
+<?php
+
+include 'conexion.php';
+// Consulta
+$sql = "SELECT id, nombre, cantidad FROM Productos";
+$result = $conexion->query($sql);
+
+if ($result->num_rows > 0) {
+    echo "<h2>Lista de Productos</h2>";
+    echo "<table border='2' cellpadding='6' cellspacing='3'>";
+    echo "<tr><th>ID</th><th>Nombre</th><th>Cantidad</th></tr>";
+    while($row = $result->fetch_assoc()) {
+        echo "<tr>";
+        echo "<td>" . $row["id"] . "</td>";
+        echo "<td>" . $row["nombre"] . "</td>";
+        echo "<td>" . $row["cantidad"] . "</td>";
+        echo "</tr>";
+    }
+    echo "</table>";
+} else {
+    echo "No hay productos cargados.";
+}
+
+$conexion->close();
+?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Lista</title>
+</head>
+<body>
+    <div>
+        <p><a href="index.php">Volver al inicio</a></p>
+    </div>
+</body>
+</html>
+
+agregar.php:
+
+<?php
+// pregunta si se envió el formulario
+include 'conexion.php';
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $nombre = $_POST["nombre"];
+    $cantidad = $_POST["cantidad"];
+
+
+    // Insertar en la tabla
+    $sql = "INSERT INTO Productos (nombre, cantidad) VALUES ('$nombre', $cantidad)";
+
+    if ($conexion->query($sql) === TRUE) {
+        echo "Producto agregado correctamente<br>";
+        //echo "<a href='listar.php'>Ver lista</a>";
+    } else {
+        echo "Error: " . $conexion->error;
+    }
+
+    $conexion->close();
+}
+?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Agregar producto</title>
+</head>
+<body>
+    <h2>Agregar Producto</h2>
+        <form method="post" action="" class="formulario">
+            Nombre: <input type="text" name="nombre" required><br><br>
+            Cantidad: <input type="number" name="cantidad" required inputmode="numeric"><br><br>
+            <input type="submit" value="Guardar" class="boton_guardar">
+        </form>
+        <div>
+            <p><a href="index.php">Volver al inicio</a></p>
+        </div>
+</body>
+</html>
+
+modificar.php:
+
+<?php
+include 'conexion.php';
+
+$producto = null;
+$mensaje = '';
+
+// Paso 1: buscar producto
+if (isset($_POST['buscar'])) {
+    $id = intval($_POST['id']);
+    $resultado = $conexion->query("SELECT * FROM Productos WHERE id = $id");
+    $producto = $resultado->fetch_assoc();
+}
+
+// Paso 2: actualizar producto
+if (isset($_POST['modificar'])) {
+    $id = intval($_POST['id']);
+    $nombre = $_POST['nombre'];
+    $cantidad = intval($_POST['cantidad']);
+
+    $sql = "UPDATE Productos SET nombre='$nombre', cantidad=$cantidad WHERE id=$id";
+    if ($conexion->query($sql) === TRUE) {
+        echo "Producto modificado con éxito.";
+    } else {
+        echo "Error al modificar: " . $conexion->error;
+    }
+}
+?>
+
+
+<?php if ($producto): ?>
+<form method="POST" action="" class="formulario">
+    <input type="hidden" name="id" value="<?php echo $producto['id']; ?>">
+    
+    <label>Nombre:</label>
+    <input type="text" name="nombre" value="<?php echo $producto['nombre']; ?>"><br><br>
+    
+    <label>Cantidad:</label>
+    <input type="number" name="cantidad" required inputmode="numeric" value="<?php echo $producto['cantidad']; ?>"><br><br>
+    
+    <input type="submit" name="modificar" value="Guardar cambios" class="boton_guardar">
+</form>
+<?php endif; ?>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Modificar</title>
+</head>
+<body>
+    <h2>Modificar producto</h2>
+<form method="POST" action="" class="formulario">
+    <label>ID del producto:</label>
+    <input type="number" name="id" required inputmode="numeric">
+    <input type="submit" name="buscar" value="Buscar" class="boton_buscar">
+    <p><a href="index.php">Volver al inicio</a></p>
+</form>
+</body>
+</html>
+
+eliminar.php:
+
+<?php
+include 'conexion.php';
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $id = intval($_POST['id']); // tomar id desde el formulario
+
+    $sql = "DELETE FROM Productos WHERE id = $id";
+    if ($conexion->query($sql) === TRUE) {
+        echo "Producto eliminado con éxito.";
+    } else {
+        echo "Error al eliminar: " . $conexion->error;
+    }
+}
+?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Eliminar</title>
+</head>
+<body>
+    <h1>Eliminar producto</h1>
+<form method="POST" action="" class="formulario">
+    <label>ID del producto a eliminar:</label>
+    <input type="number" name="id" required inputmode="numeric"><br><br>
+    <input type="submit" value="Eliminar" class="boton_eliminar">
+</form>
+<p><a href="index.php">Volver al inicio</a></p>
+</body>
+</html>

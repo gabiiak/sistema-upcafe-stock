@@ -1,8 +1,8 @@
 <?php
 $host = "localhost"; 
-$user = "u892175625_appuser"; 
-$pass = "UPcafeyalgorico91218"; 
-$db   = "u892175625_stock"; 
+$user = "root"; 
+$pass = "contraseña"; 
+$db   = "stockdb"; 
 
 // Crear conexión
 $conexion = new mysqli($host, $user, $pass, $db);

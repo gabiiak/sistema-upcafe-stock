@@ -90,6 +90,19 @@ nav a:hover {
     margin: 20px auto;
     max-width: 95%;
 }
+.sin-stock {
+    background-color: #ffe6e6; /* un rojo clarito de fondo */
+    color: #a94442; /* un rojo oscuro para el texto */
+    font-weight: bold;
+}
+.stock-bajo{
+    background-color: #fff8cc; /* amarillo clarito */
+    color: #8a6d3b; /* marrón suave para el texto */
+    font-weight: bold;
+}
+
+
+
 table{
     border-collapse: collapse;
     width: 100%;
@@ -105,7 +118,9 @@ th { /*header de la tabla*/
     background-color: #b89680;
     color: white;
     font-weight: bold;
+    /*border: 5px solid red;*/
 }
+
 @media (min-width: 600px) {
     
     /* Convierte el menú vertical en horizontal */

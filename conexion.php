@@ -2,9 +2,9 @@
 //date_default_timezone_set('America/Argentina/Buenos_Aires'); 
 
 $host = "localhost"; 
-$user = "u892175625_egouo"; 
-$pass = "q04445r0eT"; 
-$db   = "u892175625_egouo"; 
+$user = "root"; 
+$pass = "contraseña"; 
+$db   = "stockdb"; 
 
 // Crear conexión
 $conexion = new mysqli($host, $user, $pass, $db);

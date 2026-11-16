@@ -1,2 +1,0 @@
-<?php
-echo "HOLA QUIERO GANAR PLATA EN DOLARES JE";
